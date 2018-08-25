@@ -373,13 +373,21 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
     {({ basepath, baseuri }) => (
       <Location>
         {({ location, navigate }) => {
-          let { to, state, replace, getProps = k, componentWrap, getWrapProps = k, ...anchorProps } = props;
+          let {
+            to,
+            state,
+            replace,
+            getProps = k,
+            componentWrap,
+            getWrapProps = k,
+            ...anchorProps
+          } = props;
           let href = resolve(to, baseuri);
           let isCurrent = location.pathname === href;
           let isPartiallyCurrent = startsWith(location.pathname, href);
-  
+
           let locationProps = { isCurrent, isPartiallyCurrent, href, location };
-  
+
           let linkEl = (
             <a
               ref={ref || innerRef}
@@ -396,17 +404,13 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
               }}
             />
           );
-          
-          if ( componentWrap ) {
+
+          if (componentWrap) {
             let wrapProps = {};
-            if ( typeof getWrapProps === "function" ) {
+            if (typeof getWrapProps === "function") {
               wrapProps = getWrapProps(locationProps) || wrapProps;
             }
-            return (
-              <componentWrap {...wrapProps}>
-                {linkEl}
-              </componentWrap>
-            );
+            return <componentWrap {...wrapProps}>{linkEl}</componentWrap>;
           }
           return linkEl;
         }}
