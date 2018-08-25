@@ -17,7 +17,8 @@
     "clean": "rm -rf lib es umd index.js",
     "precommit": "pretty-quick --staged",
     "format": "prettier '**/*.js' --write",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "postinstall": "npm run clean; npm run build"
   },
   "jest": {
     "globals": {
