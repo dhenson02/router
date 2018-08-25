@@ -378,7 +378,7 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
             state,
             replace,
             getProps = k,
-            componentWrap,
+            componentWrap: Wrapper,
             getWrapProps = k,
             ...anchorProps
           } = props;
@@ -405,12 +405,12 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
             />
           );
 
-          if (componentWrap) {
+          if (Wrapper) {
             let wrapProps = {};
             if (typeof getWrapProps === "function") {
               wrapProps = getWrapProps(locationProps) || wrapProps;
             }
-            return <componentWrap {...wrapProps}>{linkEl}</componentWrap>;
+            return <Wrapper {...wrapProps}>{linkEl}</Wrapper>;
           }
           return linkEl;
         }}
