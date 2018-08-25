@@ -373,7 +373,7 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
     {({ basepath, baseuri }) => (
       <Location>
         {({ location, navigate }) => {
-          let { to, state, replace, getProps = k, componentWrap, getWrapProps, ...anchorProps } = props;
+          let { to, state, replace, getProps = k, componentWrap, getWrapProps = k, ...anchorProps } = props;
           let href = resolve(to, baseuri);
           let isCurrent = location.pathname === href;
           let isPartiallyCurrent = startsWith(location.pathname, href);
@@ -401,9 +401,6 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
             let wrapProps = {};
             if ( typeof getWrapProps === "function" ) {
               wrapProps = getWrapProps(locationProps) || wrapProps;
-              if ( typeof wrapProps !== "object" ) {
-                throw new Error("On <Link/> - 'getWrapProps' function must return an object");
-              }
             }
             return (
               <componentWrap {...wrapProps}>
