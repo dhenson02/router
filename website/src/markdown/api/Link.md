@@ -82,6 +82,97 @@ const PartialNavLink = props => (
 )
 ```
 
+## componentWrap: Component
+
+Takes the generated `<a>` component and wraps inside the provided component.
+
+```jsx
+const Wrapper = ({ children, ...props }) => (
+  <li {...props}>
+    {children}
+  </li>
+);
+
+// ...
+
+<Link
+  to="/abc"
+  componentWrap={Wrapper}>
+  Go somewhere
+</Link>
+```
+
+**Before**
+
+```jsx
+// ...
+<Link 
+  to="/">
+  Text
+</Link>
+
+//  =>  <a href="/">Text</a>
+```
+
+**After**
+
+```jsx
+// ...
+<Link
+  to="/"
+  componentWrap={Wrapper}>
+  Text
+</Link>
+
+/*
+  =>  
+  <Wrapper>
+    <a 
+      href="/">
+      Text
+    </a>
+  </Wrapper>
+*/
+```
+
+## getWrapProps: func(obj)
+
+*Only used when coupled with `componentWrap`*
+
+Identical behavior to `getProps` above but the returned props are spread over the `componentWrap` (rather than the default `<a>` component).
+
+```jsx
+const Wrapper = ({ children, ...props }) => (
+  <li {...props}>
+    {children}
+  </li>
+);
+
+const getWrapProps = ({ isCurrent }) => ({ 
+  'className': isCurrent 
+    ? 'is-active' 
+    : '' 
+});
+
+// ... 
+<ul>
+  <Link
+    key="link-key-0"
+    to="/abc"
+    componentWrap={Wrapper}
+    getWrapProps={getWrapProps}>
+    Go somewhere?
+  </Link>
+  <Link
+    key="link-key-1"
+    to="/def"
+    componentWrap={Wrapper}
+    getWrapProps={getWrapProps}>
+    Go somewhere else!
+  </Link>
+</ul>
+```
+
 ## state: object
 
 An object to put on location state.
