@@ -373,17 +373,19 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
     {({ basepath, baseuri }) => (
       <Location>
         {({ location, navigate }) => {
-          let { to, state, replace, getProps = k, ...anchorProps } = props;
+          let { to, state, replace, getProps = k, componentWrap, getWrapProps, ...anchorProps } = props;
           let href = resolve(to, baseuri);
           let isCurrent = location.pathname === href;
           let isPartiallyCurrent = startsWith(location.pathname, href);
-
-          return (
+  
+          let locationProps = { isCurrent, isPartiallyCurrent, href, location };
+  
+          let linkEl = (
             <a
               ref={ref || innerRef}
               aria-current={isCurrent ? "page" : undefined}
               {...anchorProps}
-              {...getProps({ isCurrent, isPartiallyCurrent, href, location })}
+              {...getProps(locationProps)}
               href={href}
               onClick={event => {
                 if (anchorProps.onClick) anchorProps.onClick(event);
@@ -394,6 +396,22 @@ let Link = forwardRef(({ innerRef, ...props }, ref) => (
               }}
             />
           );
+          
+          if ( componentWrap ) {
+            let wrapProps = {};
+            if ( typeof getWrapProps === "function" ) {
+              wrapProps = getWrapProps(locationProps) || wrapProps;
+              if ( typeof wrapProps !== "object" ) {
+                throw new Error("On <Link/> - 'getWrapProps' function must return an object");
+              }
+            }
+            return (
+              <componentWrap {...wrapProps}>
+                {linkEl}
+              </componentWrap>
+            );
+          }
+          return linkEl;
         }}
       </Location>
     )}
